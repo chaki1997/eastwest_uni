@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 
 axios.defaults.xsrfCookieName='csrftoken';
@@ -12,6 +13,16 @@ const client=axios.create({
  
 })
 function Login() {
+  const [jwt, setJwt]=useState(null)
+  const navigate=useNavigate()
+
+  useEffect(()=>{
+    let jwtToken=localStorage.getItem('jwt')
+    if(jwtToken){
+      setJwt(jwtToken)
+    }
+  }, [])
+
     const [login, setLogin]=useState({
         
         email:'',
@@ -43,15 +54,24 @@ function Login() {
             
           };
           
-         client.post(
-          "/api/login",
-            userData
-          
-         ).then(res=>{
-          console.log(res)
-        })
-}
+          client.post("/api/login", userData).then((res) => {
+            setJwt(res.data.jwt);
+            localStorage.setItem("jwt", res.data.jwt); 
+            console.log(res);
+            navigate('/profile');
+          });
 
+      
+      
+}
+// useEffect(()=>{
+//   localStorage.setItem('jwt', jwt)
+// }, [jwt])  
+// useEffect(()=>{
+//   if(jwt!='null'){
+//     navigate('/profile')
+//   }
+// }, [])
 // useEffect(()=>{
 //   client.get("/api/user")
 //   .then(

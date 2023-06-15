@@ -31,8 +31,9 @@ const GoogleAuth = () => {
     script.onload = () => {
       window.google.accounts.id.initialize({
         client_id: id,
-        callback: handleCredentialResponse,
+        // callback: handleCredentialResponse,
       });
+     
       window.google.accounts.id.renderButton(googleButton.current, {
         theme: 'outline',
         size: 'large',
@@ -48,6 +49,7 @@ const GoogleAuth = () => {
   return (
     <div id="google-login-btn">
       <div ref={googleButton} id="google-ref"></div>
+      
       <div>
         <div>
           <label>Email Id:</label>
